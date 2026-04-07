@@ -104,7 +104,7 @@ Six page templates are defined in `CLAUDE.md`, each with YAML frontmatter:
 
 ## Credits
 
-- **Pattern:** [Andrej Karpathy, "LLM Wiki"](https://karpathy.ai/blog/llmwiki.html) (April 2026)
+- **Pattern:** [Andrej Karpathy, "LLM Wiki"](https://karpathy.ai/blog/llmwiki.html) (https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) (April 2026)
 - **Adaptation and implementation:** [Paulo de Assis](https://github.com/MetamusicX)
 - **Design exploration:** ChatGPT 5.4 Thinking (OpenAI)
 - **Schema authoring and build:** Claude Code (Anthropic)
