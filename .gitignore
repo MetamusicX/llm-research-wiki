@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+raw/articles/*.pdf
+raw/books/*.pdf
+raw/chapters/*.pdf
+raw/transcripts/*.pdf
+raw/_staging/*
+!raw/_staging/.gitkeep
+outputs/**/*.pptx
+outputs/**/*.pdf
