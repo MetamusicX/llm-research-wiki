@@ -1,0 +1,92 @@
+# conventions.toml — data-shaped rules for the Research Wiki, read by scripts/wiki.py.
+#
+# The *prose* schema (identity, workflows, page templates) stays in CLAUDE.md —
+# that is authoritative for taste and process. This file holds only the
+# *machine-checkable* data extracted from it: the type enum, required
+# frontmatter, folder↔type map, size caps, and staleness thresholds. Keep the two
+# in sync: when CLAUDE.md changes a checkable rule, mirror it here so
+# `wiki lint` stays truthful.
+#
+# Python 3.9 has no tomllib; scripts/wiki.py ships a minimal parser for THIS
+# file, so keep it simple: header tables, `key = "string"`, integers, booleans,
+# and single-line arrays. Comments only on their own lines.
+
+[frontmatter]
+# Required on every wiki page regardless of type.
+required = ["title", "type", "tags", "created", "updated"]
+
+[frontmatter_by_type]
+# Extra required fields per type (missing one is a WARN, not an ERROR).
+source-note = ["author", "date", "source-type"]
+project = ["status"]
+
+[types]
+# The page-type enum. A `type:` outside this set is an ERROR.
+enum = ["source-note", "concept", "author", "debate", "synthesis", "project", "method", "theme"]
+
+[folders]
+# First path segment under wiki/  ->  the single type its pages must declare.
+# A page whose `type:` disagrees with its folder is an ERROR.
+concepts = "concept"
+authors = "author"
+debates = "debate"
+syntheses = "synthesis"
+methods = "method"
+themes = "theme"
+source-notes = "source-note"
+projects = "project"
+
+[source_type]
+# Allowed values for a source-note's `source-type:` field.
+enum = ["article", "book", "chapter", "transcript", "note"]
+
+[related]
+# `related:` is expected only on these types, with this many entries (INFO tier).
+types = ["concept", "author"]
+min = 3
+max = 5
+
+# ── Optional: epistemic-register markers ─────────────────────────────────────
+# This template ships WITHOUT epistemic markers, so the section below is
+# commented out and the marker checks are skipped. If you adopt a convention of
+# tagging claims by provenance — e.g. [P] on a "Relevance to <you>'s Research"
+# header for your own research positions, and [W] on a synthesis "## Overview"
+# for the wiki's own cross-source synthesis — uncomment this to have `wiki lint`
+# enforce it. Adjust the header text to match your schema.
+#
+# [markers]
+# relevance_header = "Relevance to Paulo's Research"   # this header must carry [P]
+# relevance_marker = "[P]"
+# overview_marker = "[W]"                              # a synthesis "## Overview" must carry [W]
+
+[size]
+# Page length in lines. soft -> INFO, hard -> WARN. Never an ERROR: dense
+# scholarly syntheses are legitimately long; oversize is a split *prompt*.
+soft_cap = 450
+hard_cap = 900
+
+[staleness]
+# A page flags STALE (INFO) only if it clears BOTH thresholds — well-linked
+# AND old together; either alone is normal.
+min_inbound_links = 5
+max_days_since_update = 180
+
+[index]
+# The root index; drift checks are scoped to the types the index enumerates.
+file = "index.md"
+tracked_types = ["source-note", "concept", "author", "debate", "synthesis"]
+
+[thin_support]
+# These types should cite at least this many source-notes in their body (INFO).
+types = ["concept", "debate"]
+min_source_links = 2
+
+[skip]
+# Root meta files: links FROM them do NOT count as inbound (so a page that only
+# appears in the index still reads as an orphan). They are still checked for
+# their own broken links — except log.md, which is append-only, never
+# auto-read, and excluded from link-checking entirely.
+noninbound_files = ["index.md", "log.md", "README.md", "CLAUDE.md"]
+no_linkcheck_files = ["log.md"]
+# Directories under the repo root that are not part of the wiki graph.
+dirs = ["archive", "outputs", "conversations", "raw", ".git", ".github", "scripts"]

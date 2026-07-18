@@ -411,6 +411,8 @@ A single ingest may touch 10-15 wiki pages. Do not shortcut this.
 7. **Weak or generic pages** — pages with thin content, vague definitions, or no source support. Flag for enrichment.
 8. **Thin source support** — concepts or debates with only one source. Note that more sources are needed.
 
+> **Mechanical checks are automated.** The deterministic subset — broken links (4), orphans (5), oversize (6), thin support (8), plus missing frontmatter and index drift — is implemented in `scripts/wiki.py` (rules in `conventions.toml`). Run `python3 scripts/wiki.py lint` to get them for free and reliably, then spend your own judgement on the checks that need reading: duplicates (1), stale drift (2), contradictions (3), and weak/generic pages (7). Treat `wiki lint` passing error-free as the last step of any wiki-touching task.
+
 After linting, produce a prioritized list of issues. Do not auto-fix — present findings and let Paulo decide.
 
 ---

@@ -56,6 +56,15 @@ Ask any research question. Claude checks `index.md` first — identifying the re
 ### LINT
 Say **"lint"** to audit the wiki for duplicates, contradictions, orphan pages, stale content, concepts mentioned but lacking pages, and thin source support. Results are presented as a prioritized issues list. Nothing is auto-fixed.
 
+The judgement-based checks (duplicates, contradictions, weak pages) are the agent's job. The **mechanical** ones — broken links, orphan pages, index drift, missing frontmatter — are handled deterministically by a small, zero-dependency Python tool, `scripts/wiki.py`, driven by `conventions.toml`:
+
+```bash
+python3 scripts/wiki.py lint            # link integrity, orphans, index drift, frontmatter
+python3 scripts/wiki.py lint --min-severity error   # the commit gate — exits nonzero on any error
+```
+
+It follows the *"the tool is the hands; the agent is the head"* split (borrowed from [engram](https://github.com/jeromeetienne/engram) and [tome](https://github.com/chicken-noodle-chris/tome)): move everything mechanically checkable out of the model so the agent stops hand-scanning every page. An empty template lints clean. See `scripts/README.md` for the full check list and `conventions.toml` for the rules.
+
 ## Folder structure
 
 ```
@@ -69,6 +78,8 @@ outputs/
   essays/   slides/   handouts/   tables/
 conversations/
 archive/
+scripts/            wiki.py — the deterministic `wiki lint` tool
+conventions.toml    data-shaped rules the linter reads
 ```
 
 ## Page types
@@ -144,6 +155,7 @@ The cascade: **cluster → synthesis → related fields → individual pages**. 
 - [Claude Code](https://claude.ai/code) (terminal or desktop app)
 - The `CLAUDE.md` file in the root folder — this is what makes Claude a wiki agent
 - No database, no embeddings, no plugins — just markdown files and folders
+- Python 3.9+ (optional — only for the `wiki lint` tool; the wiki itself is pure markdown)
 
 ## Credits
 
