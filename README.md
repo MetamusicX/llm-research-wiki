@@ -1,6 +1,8 @@
-# LLM Research Wiki
+# Zissa Wiki
 
-A personal, LLM-maintained knowledge base for academic research, built on plain markdown files and operated via [Claude Code](https://claude.ai/code).
+**Zissa Wiki** is a personal, LLM-maintained knowledge base for academic research, built on plain markdown files and operated via [Claude Code](https://claude.ai/code).
+
+> Part of the **Zissa** family of open, agent-driven tooling — a sibling to [Zissa Agent Orchestra](https://github.com/MetamusicX/zissa-agent-orchestra). *(Formerly `llm-research-wiki`; old links still redirect.)*
 
 ## Origin
 
